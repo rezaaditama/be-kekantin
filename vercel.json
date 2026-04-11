@@ -12,6 +12,9 @@
       "dest": "/public/uploads/$1"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
       "dest": "api/index.ts"
     }
