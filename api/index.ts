@@ -9,6 +9,7 @@ import menuRoutes from '../src/routes/menuRoutes';
 import orderRoutes from '../src/routes/orderRoutes';
 import authRoutes from '../src/routes/authRoutes';
 import penjualRoutes from '../src/routes/penjualRoutes';
+import path from 'path';
 
 // Inisialisasi Express
 const app = express();
@@ -17,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static('public/uploads'));
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 app.use('/api/toko', tokoRoutes);
 app.use('/api/menu', menuRoutes);
