@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import tokoRoutes from '../src/routes/tokoRoutes';
