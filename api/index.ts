@@ -7,6 +7,7 @@ import orderRoutes from '../src/routes/orderRoutes';
 import authRoutes from '../src/routes/authRoutes';
 import penjualRoutes from '../src/routes/penjualRoutes';
 import path from 'path';
+import chatRoutes from '../src/routes/chatRoutes';
 
 // Inisialisasi Express
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api', authRoutes);
 app.use('/api/toko', tokoRoutes);
 app.use('/api', penjualRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Tester
 app.get('/', (req: Request, res: Response) => {
