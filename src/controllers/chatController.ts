@@ -7,7 +7,7 @@ export const getOrCreateRoomController = async (
 ) => {
   const { user_id, shop_id } = req.body;
 
-  // Validasi parameter input untuk mencegah error database query
+  // Validasi parameter input
   if (!user_id || !shop_id) {
     return res
       .status(400)
@@ -15,10 +15,17 @@ export const getOrCreateRoomController = async (
   }
 
   try {
-    // Cek apakah room sudah ada sebelumnya (Stabil menggunakan db.query)
+    // Pastikan casting ke Number agar aman saat bind parameter database
+    const targetUserId = Number(user_id);
+    const targetShopId = Number(shop_id);
+
+    // Cek apakah room sudah ada sebelumnya
     const checkQuery =
       'SELECT room_id FROM chat_rooms WHERE user_id = ? AND shop_id = ?';
-    const [existingRows]: any = await db.query(checkQuery, [user_id, shop_id]);
+    const [existingRows]: any = await db.query(checkQuery, [
+      targetUserId,
+      targetShopId,
+    ]);
 
     if (existingRows && existingRows.length > 0) {
       return res.status(200).json({
@@ -27,10 +34,13 @@ export const getOrCreateRoomController = async (
       });
     }
 
-    // Jika belum ada, buat baris room baru
+    // Jika belum ada, buat room baru
     const insertQuery =
       'INSERT INTO chat_rooms (user_id, shop_id) VALUES (?, ?)';
-    const [insertResult]: any = await db.query(insertQuery, [user_id, shop_id]);
+    const [insertResult]: any = await db.query(insertQuery, [
+      targetUserId,
+      targetShopId,
+    ]);
 
     return res.status(201).json({
       room_id: insertResult.insertId,
