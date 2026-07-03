@@ -8,7 +8,17 @@ export const getBerandaPenjual = async (req: Request, res: Response) => {
   try {
     // Querry mengambil semua data toko
     const [tokoRows]: any = await db.query(
-      'SELECT * FROM toko WHERE user_id = ?',
+      `SELECT 
+    t.shop_id, 
+    t.user_id, 
+    t.shop_name, 
+    t.created_at AS toko_created_at,
+    u.nama_lengkap, 
+    u.email, 
+    u.nomor_telepon 
+   FROM toko t
+   INNER JOIN users u ON t.user_id = u.id 
+   WHERE t.user_id = ?`,
       [user_id]
     );
 
