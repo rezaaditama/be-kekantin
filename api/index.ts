@@ -24,11 +24,11 @@ app.use('/api/orders', orderRoutes);
 app.use('/api', authRoutes);
 app.use('/api/toko', tokoRoutes);
 app.use('/api', penjualRoutes);
-app.use('/api/chat', chatRoutes);
+app.use('/api', chatRoutes);
 
 // Tester
 app.get('/', (req: Request, res: Response) => {
-  res.send("Backend E-Canteen UIKA is running!");
+  res.send('Backend E-Canteen UIKA is running!');
 });
 
 if (process.env.NODE_ENV !== 'production') {
