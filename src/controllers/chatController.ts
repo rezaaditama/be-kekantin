@@ -98,17 +98,40 @@ export const sendMessageController = async (req: Request, res: Response) => {
   }
 };
 
-// 4. Membuka Room & Mengambil Seluruh Isi Pesan di Dalamnya
 export const getChatMessagesController = async (
   req: Request,
   res: Response
 ) => {
   const { room_id } = req.params;
   try {
-    const query =
-      'SELECT message_id, sender_id, message, is_read, created_at FROM messages WHERE room_id = ? ORDER BY created_at ASC';
-    const [rows]: any = await db.query(query, [room_id]);
-    return res.status(200).json(rows);
+    // 1. Ambil informasi detail toko yang terikat dengan room ini
+    const roomQuery = `
+      SELECT cr.room_id, cr.shop_id, t.shop_name 
+      FROM chat_rooms cr
+      JOIN toko t ON cr.shop_id = t.shop_id
+      WHERE cr.room_id = ?
+    `;
+    const [roomRows]: any = await db.query(roomQuery, [room_id]);
+
+    if (!roomRows || roomRows.length === 0) {
+      return res.status(404).json({ message: 'Room chat tidak ditemukan' });
+    }
+
+    // 2. Ambil semua baris pesan seperti biasa
+    const messagesQuery = `
+      SELECT message_id, sender_id, message, is_read, created_at 
+      FROM messages 
+      WHERE room_id = ? 
+      ORDER BY created_at ASC
+    `;
+    const [messageRows]: any = await db.query(messagesQuery, [room_id]);
+
+    // 3. Gabungkan datanya ke dalam satu response objek
+    return res.status(200).json({
+      shop_name: roomRows[0].shop_name,
+      shop_id: roomRows[0].shop_id,
+      messages: messageRows,
+    });
   } catch (error: any) {
     console.error('❌ Error di getChatMessagesController:', error.message);
     return res.status(500).json({ message: error.message });
