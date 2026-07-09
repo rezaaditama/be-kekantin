@@ -12,7 +12,6 @@ export const getBerandaPenjual = async (req: Request, res: Response) => {
     t.shop_id, 
     t.user_id, 
     t.shop_name, 
-    t.created_at AS toko_created_at,
     u.nama_lengkap, 
     u.email, 
     u.nomor_telepon 
